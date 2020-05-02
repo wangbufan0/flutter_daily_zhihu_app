@@ -3,10 +3,12 @@ import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
-import 'package:flutterdailyzhihuapp/module/home_list_page.dart';
 import 'package:flutterdailyzhihuapp/module/news_list_page.dart';
 import 'package:flutterdailyzhihuapp/news_bloc/news_event.dart';
 import 'package:flutterdailyzhihuapp/news_provider.dart';
+import 'package:flutterdailyzhihuapp/theme/bloc/theme_bloc.dart';
+import 'package:flutterdailyzhihuapp/theme/bloc/theme_state.dart';
+import 'package:flutterdailyzhihuapp/widget/swiper_widget.dart';
 
 import 'base/router.dart';
 import 'news_bloc/news_bloc.dart';
@@ -38,7 +40,10 @@ void main() {
       child: MultiBlocProvider(
         providers: [
           BlocProvider<NewsBloc>(
-            create: (context) => NewsBloc()..add(NewsRefreshEvent()),
+            create: (context) => NewsBloc()..add(NewsInitEvent()),
+          ),
+          BlocProvider<ThemeBloc>(
+            create: (context) => ThemeBloc(),
           ),
         ],
         child: MyApp(),
@@ -50,15 +55,19 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      navigatorObservers: [BotToastNavigatorObserver()],
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      routes: Router.routes,
-//      home: HomeListPage(),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+    return BlocBuilder<ThemeBloc,ThemeState>(
+      builder: (context,ThemeState state){
+        return MaterialApp(
+          title: 'Flutter Demo',
+          navigatorObservers: [BotToastNavigatorObserver()],
+          theme: ThemeData(
+            primarySwatch: state.themeColor,
+          ),
+          routes: Router.routes,
+          home: NewsListPage(),
+//      home: MyHomePage(title: 'Flutter Demo Home Page'),
+        );
+      },
     );
   }
 }
@@ -94,6 +103,14 @@ class _MyHomePageState extends State<MyHomePage> {
       _counter++;
     });
   }
+
+  List<String> datas = [
+    "http://via.placeholder.com/350x150",
+    "http://via.placeholder.com/350x150",
+    "http://via.placeholder.com/350x150",
+    "http://via.placeholder.com/350x150",
+    "http://via.placeholder.com/350x150",
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -131,16 +148,14 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             SizedBox(
               height: 250,
-              child: Swiper(
-                itemBuilder: (context, index) {
+              child: SwipeWidget<String>(
+                datas: datas,
+                itemBuilder: (context, String s) {
                   return Image.network(
-                    "http://via.placeholder.com/350x150",
+                    s,
                     fit: BoxFit.fill,
                   );
                 },
-                itemCount: 5,
-                pagination: SwiperPagination(),
-                autoplay: true,
               ),
             ),
             Text(

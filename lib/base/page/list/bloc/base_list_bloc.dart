@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:flutter/material.dart';
 import './base_list_event.dart';
 import './base_list_state.dart';
 export './base_list_event.dart';

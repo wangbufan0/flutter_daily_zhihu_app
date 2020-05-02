@@ -12,6 +12,7 @@ import 'package:flutterdailyzhihuapp/module/news_list_widget.dart';
 import 'package:flutterdailyzhihuapp/news_bloc/news_bloc.dart';
 import 'package:flutterdailyzhihuapp/news_bloc/news_event.dart';
 import 'package:flutterdailyzhihuapp/news_bloc/news_state.dart';
+import 'package:flutterdailyzhihuapp/theme/theme_page.dart';
 
 ///
 /// author：wangbufan
@@ -26,6 +27,55 @@ class NewsListPage extends BasePage<NewsListPage, NewsBloc> {
 
   @override
   String get barTile => 'NewsList';
+
+  @override
+  Widget getBar(BuildContext context) {
+    DateTime date = DateTime.now();
+    return PreferredSize(
+      preferredSize: Size.fromHeight(54),
+      child: Container(
+        color: Theme.of(context).primaryColor,
+        child: DefaultTextStyle(
+          style: TextStyle(
+              color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+          child: Padding(
+            padding: const EdgeInsets.only(top:30.0,left: 10,right: 10,bottom: 5),
+            child: Row(
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    Column(
+                      children: <Widget>[
+                        Text('${date.day}'),
+                        Text('${date.month}月',style: TextStyle(
+                          inherit: false,
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold
+                        ),),
+                      ],
+                    ),
+                    Container(
+                      margin: EdgeInsets.symmetric(horizontal: 10),
+//                      height: 20,
+                      width: 1,
+                      color: Colors.grey[100],
+                    ),
+                    Text('Demo-知乎日报'),
+                  ],
+                ),
+
+                Expanded(child: Container(),),
+                IconButton(
+                  icon: Icon(Icons.color_lens,color: Colors.white,),
+                  onPressed: () => Navigator.pushNamed(context, ThemePage.router),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 
   @override
   NewsBloc getBLoc({BuildContext context}) =>
@@ -73,14 +123,14 @@ class NewsListPage extends BasePage<NewsListPage, NewsBloc> {
 
   @override
   Widget getBody(BuildContext context) {
-    return BlocBuilder<NewsBloc,NewsState>(
+    return BlocBuilder<NewsBloc, NewsState>(
       bloc: bloc,
-      builder: (context,NewsState state){
-        if(state is NewsInitialState){
+      builder: (context, NewsState state) {
+        if (state is NewsInitialState) {
           return _getLoadingWidget();
-        }else if(state is NewsErrorState){
+        } else if (state is NewsErrorState) {
           return _getErrorWidget('出错了,点击重试');
-        }else if(state is NewsSuccessState){
+        } else if (state is NewsSuccessState) {
           return NewsListWidget(
             stories: state.datas,
             topStories: state.topStories,

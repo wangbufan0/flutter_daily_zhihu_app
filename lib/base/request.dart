@@ -1,6 +1,4 @@
 import 'dart:collection';
-import 'dart:io';
-
 import 'package:connectivity/connectivity.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutterdailyzhihuapp/module/news_list_page.dart';
+import 'package:flutterdailyzhihuapp/theme/theme_page.dart';
 ///
 /// author：wangbufan
 /// time: 2020/2/20
@@ -12,6 +13,7 @@ class Router{
 
   static Map<String,WidgetBuilder> routes={
     NewsListPage.router:(context)=>NewsListPage(),
+    ThemePage.router:ThemePage.builder,
   };
 
 }

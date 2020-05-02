@@ -40,7 +40,10 @@ abstract class BasePage<T extends BasePage<T, B>, B extends Bloc>
   void onCreate(BuildContext context) {}
 
   //销毁时
-  void onDestroy(BuildContext context) {}
+  void onDestroy(BuildContext context) {
+    bloc?.close();
+    _bloc=null;
+  }
 
   //获得标题实体
   Widget getBar(BuildContext context) {
@@ -77,8 +80,6 @@ class _BasePageState<T extends BasePage<T, B>, B extends Bloc>
     if(DialogManager().isShowDialog){
       DialogManager().hideDialog(context);
     }
-    widget.bloc?.close();
-    widget._bloc=null;
     super.dispose();
   }
 

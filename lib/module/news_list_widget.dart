@@ -1,18 +1,11 @@
-import 'package:bloc/bloc.dart';
-
-///
-/// author：wangbufan
-/// time: 2020/2/28
-/// email: wangbufan00@gmail.com
-///
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_easyrefresh/material_footer.dart';
 import 'package:flutter_easyrefresh/material_header.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
-import 'package:flutterdailyzhihuapp/base/page/base_page.dart';
+import 'package:flutterdailyzhihuapp/base/utils/string_util.dart';
+import 'package:flutterdailyzhihuapp/module/home_swiper_widget.dart';
 import 'package:flutterdailyzhihuapp/module/news_list_one_day_widget.dart';
 import 'package:flutterdailyzhihuapp/news_bloc/news_bloc.dart';
 import 'package:flutterdailyzhihuapp/news_bloc/news_event.dart';
@@ -35,42 +28,49 @@ class NewsListWidget extends StatelessWidget {
     this.stories,
   }) : super(key: key);
 
-
-  Widget getSwiper() {
-    return Swiper(
-      itemBuilder: (context, index) {
-        return Image.network(
-          topStories[index].image,
-          fit: BoxFit.fill,
-        );
-      },
-      itemCount: 5,
-      pagination: SwiperPagination(),
-      autoplay: true,
+  Widget _getDateLine(NewsDataEntity data) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        Container(
+          child: Text(
+            StringUtil.String2Date(data.date),
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              color: Colors.grey,
+            ),
+          ),
+          padding: EdgeInsets.all(10),
+        ),
+        Expanded(
+          child: Container(
+            height: 1,
+            color: Colors.grey[300],
+          ),
+        ),
+      ],
     );
   }
 
-  Widget getBody() {
+  Widget _getBody() {
     return CustomScrollView(
       slivers: <Widget>[
         SliverToBoxAdapter(
-          child: SizedBox(
-            height: 250,
-            child: getSwiper(),
-          ),
+          child: HomeSwiperWidget(topStories: topStories),
         ),
         SliverList(
           delegate: SliverChildBuilderDelegate(
             (context, index) {
-              NewsDataEntity data=stories[index];
+              NewsDataEntity data = stories[index];
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Container(
-                    child: index==0?null:Text(data.date),
-                  )
-                  ,
-                  NewsListOneDayWidget(data: data,),
+                  index == 0
+                      ? Container(
+                          padding: EdgeInsets.only(top: 10),
+                        )
+                      : _getDateLine(data),
+                  NewsListOneDayWidget(data: data),
                 ],
               );
             },
@@ -96,8 +96,8 @@ class NewsListWidget extends StatelessWidget {
       footer: MaterialFooter(),
       onRefresh: onRefresh,
       onLoad: onLoading,
-      child: getBody(),
+      child: _getBody(),
+      firstRefresh: true,
     );
-    ;
   }
 }
