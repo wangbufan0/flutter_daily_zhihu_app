@@ -1,6 +1,6 @@
 # flutter daily zhihu app
 
-This is a Demo when i learn flutter.this is a news reading software.The api from zhihu daily.If you want see the app.You can install [apk](https://github.com/wangbufan0/flutter_daily_zhihu_app/raw/master/apk/app.apk).And this is same screenshots.
+This is a Demo when i learn flutter.this is a news reading software.The api from zhihu daily.If you want see the app.And this is same screenshots.
 
 <img width="200" src="./screenshots/1.jpg"/><img width="200" src="./screenshots/2.jpg"/>
 ## Getting Started
